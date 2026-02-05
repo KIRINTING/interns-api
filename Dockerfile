@@ -1,6 +1,12 @@
 # 1. ใช้ PHP 8.2+ พร้อม Apache
 FROM php:8.2-apache
+# เพิ่มบรรทัดนี้เพื่อบอก Composer ว่า "ใช้ RAM เท่าไหร่ก็ได้ที่มี"
+ENV COMPOSER_MEMORY_LIMIT=-1
 
+# ปรับคำสั่ง install: 
+# เพิ่ม --no-scripts เพื่อไม่ให้รันพวก post-install scripts ตอน build (ไปรันตอน start แทนถ้าจำเป็น)
+# และเพิ่ม --no-interaction
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-interaction
 # 2. ติดตั้ง System Dependencies & PHP Extensions
 RUN apt-get update && apt-get install -y \
     libpng-dev libonig-dev libxml2-dev zip unzip git libpq-dev \
